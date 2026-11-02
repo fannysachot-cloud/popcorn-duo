@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Popcorn Duo</title>
+  <meta name="description" content="Regarder un film ou une série à deux, chacun chez soi.">
+  <meta property="og:title" content="🍿 Tu es invité·e à une séance Popcorn Duo">
+  <meta property="og:description" content="Regardons un film ensemble, chacun chez soi, en se voyant à la webcam.">
+  <meta property="og:image" content="logo.png">
+  <link rel="icon" href="logo.png">
+  <style>
+    :root { --red: #e50914; --bg: #0b0b0b; --card: #171717; --text: #f5f5f5; --muted: #a3a3a3; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 50% 0, #2a0306, var(--bg) 60%);
+           color: var(--text); font-family: -apple-system, system-ui, "Segoe UI", sans-serif;
+           display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+    main { width: 100%; max-width: 460px; text-align: center; }
+    .logo { width: 120px; height: 120px; border-radius: 26px; }
+    h1 { font-size: 26px; margin: 18px 0 8px; }
+    p { color: var(--muted); line-height: 1.5; margin: 0 0 16px; }
+    .card { background: var(--card); border-radius: 16px; padding: 20px; margin-top: 20px; text-align: left; }
+    .btn { display: block; width: 100%; text-align: center; background: var(--red); color: #fff; text-decoration: none;
+           font-weight: 700; font-size: 17px; padding: 15px; border-radius: 12px; border: 0; cursor: pointer; }
+    .btn:hover { filter: brightness(1.1); }
+    .btn.secondary { background: #2a2a2a; font-weight: 600; font-size: 15px; margin-top: 10px; }
+    ol { margin: 0; padding-left: 20px; color: var(--text); line-height: 1.6; }
+    li { margin-bottom: 6px; }
+    code { background: #2a2a2a; padding: 2px 6px; border-radius: 6px; }
+    .small { font-size: 13px; color: var(--muted); margin: 14px 0 0; }
+    .warn { border: 1px solid #5a4500; background: #241c00; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+<main>
+  <img class="logo" src="logo.png" alt="">
+
+  <!-- Opened from an invite link -->
+  <section id="invite" hidden>
+    <h1>Tu es invité·e à une séance 🍿</h1>
+    <p>Regardez un film ou une série ensemble sur Netflix, chacun·e chez soi, en vous voyant à la webcam.</p>
+
+    <div class="card warn" id="wrong-device" hidden>
+      <p style="margin:0;color:var(--text)">Popcorn Duo marche sur <b>ordinateur</b>, dans <b>Google Chrome</b> (ou Edge, Brave, Arc).
+        Ouvre ce lien sur ton ordinateur, avec l'un de ces navigateurs.</p>
+    </div>
+
+    <div id="install-store" hidden>
+      <div class="card">
+        <a class="btn" id="store-link" target="_blank" rel="noopener">Installer Popcorn Duo</a>
+        <p class="small">Clique sur « Ajouter à Chrome », puis confirme. Ensuite, tu arrives automatiquement dans la séance.</p>
+      </div>
+    </div>
+
+    <div id="install-manual" hidden>
+      <div class="card">
+        <a class="btn" href="popcorn-duo.zip" download>Télécharger Popcorn Duo</a>
+        <ol style="margin-top:16px">
+          <li>Ouvre le fichier téléchargé : un dossier <b>popcorn-duo</b> apparaît. Range-le dans <b>Documents</b> (il doit y rester).</li>
+          <li>Dans Chrome, va sur <code>chrome://extensions</code>.</li>
+          <li>Active <b>Mode développeur</b> (en haut à droite).</li>
+          <li>Glisse le dossier <b>popcorn-duo</b> sur cette page.</li>
+        </ol>
+        <p class="small">Tu arrives ensuite automatiquement dans la séance.</p>
+      </div>
+    </div>
+
+    <p class="small">Déjà installé ? <a href="#" id="reload" style="color:var(--text)">Recharge cette page</a>.</p>
+  </section>
+
+  <!-- Opened without an invite -->
+  <section id="home" hidden>
+    <h1>Popcorn Duo</h1>
+    <p>Regarder Netflix à deux, chacun·e chez soi : lecture synchronisée et webcam, pour les ami·es, la famille ou les crushs.</p>
+    <p>Pour rejoindre une séance, il te faut un lien d'invitation.</p>
+  </section>
+
+  <p class="small"><a href="confidentialite.html" style="color:var(--muted)">Confidentialité</a></p>
+</main>
+
+<script>
+  // Fill in once Popcorn Duo is on the Chrome Web Store; until then, the manual download is shown.
+  const STORE_URL = "";
+
+  const isInvite = /^#[A-Za-z0-9]{6}\.[a-z0-9]{8,}\.\d*$/.test(location.hash);
+  const isMobile = /Android|iPhone|iPad|Mobi/i.test(navigator.userAgent);
+  const isChromium = !!window.chrome && /Chrome\//.test(navigator.userAgent);
+
+  document.getElementById(isInvite ? "invite" : "home").hidden = false;
+  if (isInvite) {
+    if (isMobile || !isChromium) {
+      document.getElementById("wrong-device").hidden = false;
+    } else if (STORE_URL) {
+      document.getElementById("store-link").href = STORE_URL;
+      document.getElementById("install-store").hidden = false;
+    } else {
+      document.getElementById("install-manual").hidden = false;
+    }
+  }
+  document.getElementById("reload").onclick = (e) => {
+    e.preventDefault();
+    location.reload();
+  };
+</script>
+</body>
+</html>
